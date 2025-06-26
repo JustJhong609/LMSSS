@@ -1,0 +1,7 @@
+{
+  "name": "LMSSS",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
