@@ -1,0 +1,14 @@
+/* src/components/FeedbackModal.css */
+.feedback-modal .modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+}
+
+.feedback-modal .feedback-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+}
