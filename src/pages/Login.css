@@ -1,0 +1,71 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding-top: 20px;
+}
+
+.soft-card {
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+.welcome-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--ion-color-primary);
+  margin-bottom: 8px;
+}
+
+.welcome-subtitle {
+  font-size: 1rem;
+  color: var(--ion-color-medium);
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.soft-input {
+  --border-radius: 12px;
+  --background: #404040;
+  --padding-start: 16px;
+  --padding-end: 16px;
+}
+
+.input-spacer {
+  height: 20px;
+}
+
+.input-spacer-large {
+  height: 30px;
+}
+
+.login-btn {
+  --border-radius: 12px;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: 48px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.show-password-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
+  --padding-start: 8px;
+  --padding-end: 8px;
+}
+
+.role-item {
+  --background: transparent;
+  --inner-padding-end: 0;
+}
+
+.role-item ion-checkbox {
+  margin-right: 8px;
+}

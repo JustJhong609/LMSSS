@@ -2,189 +2,197 @@ import React, { useState } from 'react';
 import {
   IonContent,
   IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonButtons,
-  IonButton,
-  IonItem,
   IonInput,
+  IonButton,
+  IonAlert,
+  IonLoading,
+  IonCheckbox,
   IonLabel,
-  IonIcon,
-  IonModal,
+  IonItem,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonText,
   IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonLoading
+  IonCardContent
 } from '@ionic/react';
-import { lockClosed, mail, close, alertCircle, checkmarkCircle } from 'ionicons/icons';
 import './Login.css';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const [modalTitle, setModalTitle] = useState('');
-  const [modalMessage, setModalMessage] = useState('');
-  const [modalIcon, setModalIcon] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [isStudent, setIsStudent] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertHeader, setAlertHeader] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async () => {
-    if (!validateForm()) return;
-
-    setIsLoading(true);
-    
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Successful login
-      showFeedbackModal(
-        'Welcome!',
-        'You have successfully logged in.',
-        checkmarkCircle
-      );
-    } catch (error) {
-      // Failed login
-      showFeedbackModal(
-        'Login Failed',
-        'Invalid email or password. Please try again.',
-        alertCircle
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const validateForm = (): boolean => {
+  const handleLogin = () => {
     if (!email) {
-      showFeedbackModal(
-        'Validation Error',
-        'Please enter your email address.',
-        alertCircle
-      );
-      return false;
+      setAlertHeader('Email Required');
+      setAlertMessage('Please enter your email address');
+      setShowAlert(true);
+      return;
     }
 
     if (!password) {
-      showFeedbackModal(
-        'Validation Error',
-        'Please enter your password.',
-        alertCircle
-      );
-      return false;
+      setAlertHeader('Password Required');
+      setAlertMessage('Please enter your password');
+      setShowAlert(true);
+      return;
     }
 
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
-      showFeedbackModal(
-        'Validation Error',
-        'Please enter a valid email address.',
-        alertCircle
-      );
-      return false;
+    if (!email.includes('@') || !email.includes('.')) {
+      setAlertHeader('Invalid Email');
+      setAlertMessage('Please enter a valid email address');
+      setShowAlert(true);
+      return;
     }
 
-    return true;
-  };
+    setIsLoading(true);
 
-  const showFeedbackModal = (title: string, message: string, icon: string) => {
-    setModalTitle(title);
-    setModalMessage(message);
-    setModalIcon(icon);
-    setShowModal(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      
+      if (password.length >= 6) {
+        setAlertHeader('Login Successful');
+        setAlertMessage(`Welcome ${isStudent ? 'Student' : 'Admin'}!`);
+        setShowAlert(true);
+      } else {
+        setAlertHeader('Login Failed');
+        setAlertMessage('Invalid password. Password must be at least 6 characters.');
+        setShowAlert(true);
+      }
+    }, 2000);
   };
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar color="primary">
-          <IonTitle>Login</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      
-      <IonContent fullscreen className="ion-padding">
+      <IonContent className="ion-padding" scrollY={false}>
         <div className="login-container">
-          <IonCard className="login-card">
-            <IonCardHeader>
-              <IonCardTitle className="text-center">Welcome Back</IonCardTitle>
-            </IonCardHeader>
-            
+          <IonCard className="soft-card">
             <IonCardContent>
-              <IonItem className="ion-margin-bottom">
-                <IonLabel position="floating">Email</IonLabel>
-                <IonInput
-                  type="email"
-                  value={email}
-                  onIonChange={e => setEmail(e.detail.value!)}
-                  placeholder="your@email.com"
-                />
-                <IonIcon slot="end" icon={mail} />
-              </IonItem>
-              
-              <IonItem className="ion-margin-bottom">
-                <IonLabel position="floating">Password</IonLabel>
-                <IonInput
-                  type="password"
-                  value={password}
-                  onIonChange={e => setPassword(e.detail.value!)}
-                  placeholder="••••••••"
-                />
-                <IonIcon slot="end" icon={lockClosed} />
-              </IonItem>
-              
-              <IonButton
-                expand="block"
-                onClick={handleLogin}
-                className="ion-margin-top"
-              >
-                Login
-              </IonButton>
-              
-              <div className="ion-text-center ion-margin-top">
-                <IonButton fill="clear" routerLink="/forgot-password">
-                  Forgot Password?
-                </IonButton>
-              </div>
+              <IonGrid>
+                <IonRow className="ion-justify-content-center">
+                  <IonCol size="12" className="ion-text-center">
+                    <h1 className="welcome-title">Welcome Back</h1>
+                    <p className="welcome-subtitle">Hey! Good to see you again.</p>
+                  </IonCol>
+                </IonRow>
+
+                {/* Email Input */}
+                <IonRow>
+                  <IonCol>
+                    <IonItem className="soft-input" lines="none">
+                      <IonLabel position="floating">Email Address</IonLabel>
+                      <IonInput
+                        type="email"
+                        value={email}
+                        onIonChange={(e) => setEmail(e.detail.value!)}
+                        clearOnEdit={true}
+                      />
+                    </IonItem>
+                  </IonCol>
+                </IonRow>
+
+                {/* Spacer between inputs */}
+                <div className="input-spacer"></div>
+
+                {/* Password Input */}
+                <IonRow>
+                  <IonCol>
+                    <IonItem className="soft-input" lines="none">
+                      <IonLabel position="floating">Password</IonLabel>
+                      <IonInput
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        onIonChange={(e) => setPassword(e.detail.value!)}
+                        clearOnEdit={true}
+                      />
+                    </IonItem>
+                    <IonButton
+                      fill="clear"
+                      size="small"
+                      className="show-password-btn"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? 'Hide' : 'Show'}
+                    </IonButton>
+                  </IonCol>
+                </IonRow>
+
+                {/* Spacer before role selection */}
+                <div className="input-spacer-large"></div>
+
+                {/* Role Selection */}
+                <IonRow className="ion-justify-content-center">
+                  <IonCol size="auto">
+                    <IonItem lines="none" className="role-item">
+                      <IonCheckbox 
+                        checked={isStudent} 
+                        onIonChange={() => setIsStudent(true)} 
+                        slot="start" 
+                      />
+                      <IonLabel>Student</IonLabel>
+                    </IonItem>
+                  </IonCol>
+                  <IonCol size="auto">
+                    <IonItem lines="none" className="role-item">
+                      <IonCheckbox 
+                        checked={!isStudent} 
+                        onIonChange={() => setIsStudent(false)} 
+                        slot="start" 
+                      />
+                      <IonLabel>Admin</IonLabel>
+                    </IonItem>
+                  </IonCol>
+                </IonRow>
+
+                {/* Login Button */}
+                <IonRow className="ion-margin-top">
+                  <IonCol>
+                    <IonButton
+                      expand="block"
+                      shape="round"
+                      onClick={handleLogin}
+                      className="login-btn"
+                    >
+                      LOGIN
+                    </IonButton>
+                  </IonCol>
+                </IonRow>
+
+                {/* Sign Up Link */}
+                <IonRow className="ion-margin-top">
+                  <IonCol className="ion-text-center">
+                    <IonText color="medium">
+                      Don't have an account? <br />
+                      <IonButton fill="clear" size="small" routerLink="/signup">
+                        CREATE ACCOUNT
+                      </IonButton>
+                    </IonText>
+                  </IonCol>
+                </IonRow>
+              </IonGrid>
             </IonCardContent>
           </IonCard>
         </div>
+
+        <IonAlert
+          isOpen={showAlert}
+          onDidDismiss={() => setShowAlert(false)}
+          header={alertHeader}
+          message={alertMessage}
+          buttons={['OK']}
+        />
+
+        <IonLoading
+          isOpen={isLoading}
+          message={'Logging in...'}
+          spinner="crescent"
+        />
       </IonContent>
-      
-      {/* Feedback Modal */}
-      <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
-        <IonHeader>
-          <IonToolbar color={modalIcon === alertCircle ? 'danger' : 'success'}>
-            <IonTitle>{modalTitle}</IonTitle>
-            <IonButtons slot="end">
-              <IonButton onClick={() => setShowModal(false)}>
-                <IonIcon slot="icon-only" icon={close} />
-              </IonButton>
-            </IonButtons>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent className="ion-padding">
-          <div className="modal-content">
-            <IonIcon
-              icon={modalIcon}
-              size="large"
-              color={modalIcon === alertCircle ? 'danger' : 'success'}
-              className="modal-icon"
-            />
-            <p>{modalMessage}</p>
-            <IonButton
-              expand="block"
-              onClick={() => setShowModal(false)}
-              className="ion-margin-top"
-            >
-              OK
-            </IonButton>
-          </div>
-        </IonContent>
-      </IonModal>
-      
-      {/* Loading Spinner */}
-      <IonLoading isOpen={isLoading} message="Authenticating..." />
     </IonPage>
   );
 };
